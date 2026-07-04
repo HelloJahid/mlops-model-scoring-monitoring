@@ -37,9 +37,10 @@ def dataframe_summary():
 
     means = numeric_data.mean().tolist()
     medians = numeric_data.median().tolist()
+    modes = numeric_data.mode().iloc[0].tolist()
     stds = numeric_data.std().tolist()
 
-    return [means, medians, stds]
+    return [means, medians, modes, stds]
 
 
 ################## Function to get percent of missing data

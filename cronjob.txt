@@ -1,1 +1,1 @@
-*/10 * * * * cd /workspaces/cd0583-project-starter-file && /usr/local/bin/python /workspaces/cd0583-project-starter-file/fullprocess.py
+*/10 * * * * cd /workspaces/mlops-model-scoring-monitoring && /usr/local/bin/python fullprocess.py >> /tmp/fullprocess_cron.log 2>&1

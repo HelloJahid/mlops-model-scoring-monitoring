@@ -26,6 +26,12 @@
         1.0
       ],
       [
+        0.0,
+        18.0,
+        1.0,
+        1.0
+      ],
+      [
         284.0332293669447,
         2192.6449584568304,
         31.353885785435814,
@@ -35,8 +41,8 @@
   },
   "diagnostics": {
     "execution_time": [
-      0.42367457831278443,
-      1.12170566059649
+      0.4595683389999863,
+      1.498467360999996
     ],
     "missing_data_percent": [
       0.0,
@@ -48,7 +54,7 @@
     "outdated_packages": [
       {
         "current_version": "8.3.1",
-        "latest_version": "8.3.2",
+        "latest_version": "8.4.2",
         "package": "click"
       },
       {
@@ -63,7 +69,7 @@
       },
       {
         "current_version": "23.0.0",
-        "latest_version": "25.3.0",
+        "latest_version": "23.0.0",
         "package": "gunicorn"
       },
       {
@@ -93,17 +99,17 @@
       },
       {
         "current_version": "3.10.8",
-        "latest_version": "3.10.8",
+        "latest_version": "3.11.0",
         "package": "matplotlib"
       },
       {
         "current_version": "2.3.5",
-        "latest_version": "2.4.4",
+        "latest_version": "2.5.0",
         "package": "numpy"
       },
       {
         "current_version": "2.3.3",
-        "latest_version": "3.0.2",
+        "latest_version": "3.0.3",
         "package": "pandas"
       },
       {
@@ -127,13 +133,18 @@
         "package": "pytz"
       },
       {
+        "current_version": "2.32.3",
+        "latest_version": "2.34.2",
+        "package": "requests"
+      },
+      {
         "current_version": "1.8.0",
-        "latest_version": "1.8.0",
+        "latest_version": "1.9.0",
         "package": "scikit-learn"
       },
       {
         "current_version": "1.16.3",
-        "latest_version": "1.17.1",
+        "latest_version": "1.18.0",
         "package": "scipy"
       },
       {
