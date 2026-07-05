@@ -41,8 +41,8 @@
   },
   "diagnostics": {
     "execution_time": [
-      0.4595683389999863,
-      1.498467360999996
+      0.40958435799996096,
+      1.1850421959999267
     ],
     "missing_data_percent": [
       0.0,
@@ -53,117 +53,117 @@
     ],
     "outdated_packages": [
       {
-        "current_version": "8.3.1",
+        "installed_version": "8.3.1",
         "latest_version": "8.4.2",
         "package": "click"
       },
       {
-        "current_version": "0.12.1",
+        "installed_version": "0.12.1",
         "latest_version": "0.12.1",
         "package": "cycler"
       },
       {
-        "current_version": "3.1.3",
+        "installed_version": "3.1.3",
         "latest_version": "3.1.3",
         "package": "Flask"
       },
       {
-        "current_version": "23.0.0",
-        "latest_version": "23.0.0",
+        "installed_version": "23.0.0",
+        "latest_version": "26.0.0",
         "package": "gunicorn"
       },
       {
-        "current_version": "2.2.0",
+        "installed_version": "2.2.0",
         "latest_version": "2.2.0",
         "package": "itsdangerous"
       },
       {
-        "current_version": "3.1.6",
+        "installed_version": "3.1.6",
         "latest_version": "3.1.6",
         "package": "Jinja2"
       },
       {
-        "current_version": "1.5.3",
+        "installed_version": "1.5.3",
         "latest_version": "1.5.3",
         "package": "joblib"
       },
       {
-        "current_version": "1.5.0",
+        "installed_version": "1.5.0",
         "latest_version": "1.5.0",
         "package": "kiwisolver"
       },
       {
-        "current_version": "3.0.3",
+        "installed_version": "3.0.3",
         "latest_version": "3.0.3",
         "package": "MarkupSafe"
       },
       {
-        "current_version": "3.10.8",
+        "installed_version": "3.10.8",
         "latest_version": "3.11.0",
         "package": "matplotlib"
       },
       {
-        "current_version": "2.3.5",
-        "latest_version": "2.5.0",
+        "installed_version": "2.3.5",
+        "latest_version": "2.5.1",
         "package": "numpy"
       },
       {
-        "current_version": "2.3.3",
+        "installed_version": "2.3.3",
         "latest_version": "3.0.3",
         "package": "pandas"
       },
       {
-        "current_version": "12.1.1",
-        "latest_version": "12.1.1",
+        "installed_version": "12.1.1",
+        "latest_version": "12.3.0",
         "package": "Pillow"
       },
       {
-        "current_version": "3.3.2",
+        "installed_version": "3.3.2",
         "latest_version": "3.3.2",
         "package": "pyparsing"
       },
       {
-        "current_version": "2.9.0.post0",
+        "installed_version": "2.9.0.post0",
         "latest_version": "2.9.0.post0",
         "package": "python-dateutil"
       },
       {
-        "current_version": "2026.1.post1",
-        "latest_version": "2026.1.post1",
+        "installed_version": "2026.1.post1",
+        "latest_version": "2026.2",
         "package": "pytz"
       },
       {
-        "current_version": "2.32.3",
+        "installed_version": "2.32.3",
         "latest_version": "2.34.2",
         "package": "requests"
       },
       {
-        "current_version": "1.8.0",
+        "installed_version": "1.8.0",
         "latest_version": "1.9.0",
         "package": "scikit-learn"
       },
       {
-        "current_version": "1.16.3",
+        "installed_version": "1.16.3",
         "latest_version": "1.18.0",
         "package": "scipy"
       },
       {
-        "current_version": "0.13.2",
+        "installed_version": "0.13.2",
         "latest_version": "0.13.2",
         "package": "seaborn"
       },
       {
-        "current_version": "1.17.0",
+        "installed_version": "1.17.0",
         "latest_version": "1.17.0",
         "package": "six"
       },
       {
-        "current_version": "3.6.0",
+        "installed_version": "3.6.0",
         "latest_version": "3.6.0",
         "package": "threadpoolctl"
       },
       {
-        "current_version": "3.1.6",
+        "installed_version": "3.1.6",
         "latest_version": "3.1.8",
         "package": "Werkzeug"
       }

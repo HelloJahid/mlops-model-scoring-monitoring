@@ -50,10 +50,22 @@ python fullprocess.py
 
 1. Compare files in `input_folder_path` against `production_deployment/ingestedfiles.txt`.
    If no new files exist, stop.
-2. Ingest the new data, then score the currently deployed model on it. If the new F1 is
-   greater than or equal to the previously recorded score, no model drift has occurred, so stop.
-3. Otherwise re-train, re-score, re-deploy, and regenerate the confusion matrix and API
-   reports for the new model.
+2. Ingest the new data, then score the currently deployed model on it. If the F1 on the new
+   data is greater than or equal to the previously recorded score, no model drift has
+   occurred, so stop.
+3. Otherwise train a candidate model on the new data and score it on the test set.
+4. Deploy the candidate only if it outperforms the currently deployed model. A candidate
+   that scores worse is never deployed, so production performance can only improve.
+5. After a successful re-deployment, regenerate the confusion matrix and API reports for
+   the new model as `confusionmatrix2.png` and `apireturns2.txt`.
+
+The initial production deployment is bootstrapped by running the full pipeline manually
+after switching `config.json` to `sourcedata` and `models`, following the project
+instructions. All subsequent automated re-deployments are gated by the score comparison
+above. The first-run reports (`confusionmatrix.png`, `apireturns.txt`) are produced by the
+practice configuration run and the second-run reports (`confusionmatrix2.png`,
+`apireturns2.txt`) are produced directly by the production configuration run, so the two
+pairs are distinct artefacts rather than copies.
 
 ## Cron Job
 

@@ -1,18 +1,20 @@
 """Process automation for the ML model scoring and monitoring pipeline.
 
-Runs the full re-deployment decision process:
-1. Check for new data; ingest it if found (otherwise stop).
-2. Check for model drift by scoring the *deployed* model on the newly
-   ingested data and comparing against the previously recorded score
-   (otherwise stop).
-3. Re-train, re-score, and re-deploy the model.
-4. Run diagnostics and reporting on the newly deployed model.
+Re-deployment decision process:
+1. Check for new data. If none exists, stop; otherwise ingest it.
+2. Check for model drift by scoring the currently deployed model on the
+   newly ingested data. If performance has not degraded, stop.
+3. Re-train a candidate model on the new data and score it on the test set.
+4. Deploy the candidate model only if it outperforms the currently
+   deployed model. A model that scores worse is never deployed.
+5. After a successful re-deployment, regenerate the confusion matrix and
+   API reports for the newly deployed model (saved as confusionmatrix2.png
+   and apireturns2.txt, distinct outputs of this second run).
 """
 import ast
 import json
 import os
 import pickle
-import shutil
 import subprocess
 import sys
 import time
@@ -70,7 +72,7 @@ def score_deployed_model_on_new_data():
     return f1_score(new_data[TARGET_COLUMN], predictions)
 
 
-################## Diagnostics and reporting on the deployed model
+################## Diagnostics and reporting on the newly deployed model
 def start_api_server():
     server = subprocess.Popen(
         [sys.executable, 'app.py'],
@@ -82,25 +84,15 @@ def start_api_server():
 
 
 def run_reporting_and_api_calls():
-    reporting.score_model()
+    """Generate the second-run reports for the newly deployed model."""
+    reporting.score_model('confusionmatrix2.png')
 
     server = start_api_server()
     try:
-        subprocess.run([sys.executable, 'apicalls.py'], check=True)
+        subprocess.run([sys.executable, 'apicalls.py', 'apireturns2.txt'], check=True)
     finally:
         server.terminate()
         server.wait(timeout=10)
-
-
-def archive_submission_outputs():
-    """Save production copies of the reports as confusionmatrix2.png / apireturns2.txt."""
-    for source_name, archive_name in [
-        ('confusionmatrix.png', 'confusionmatrix2.png'),
-        ('apireturns.txt', 'apireturns2.txt'),
-    ]:
-        source_path = os.path.join(output_model_path, source_name)
-        if os.path.exists(source_path):
-            shutil.copy2(source_path, os.path.join(output_model_path, archive_name))
 
 
 def main():
@@ -121,27 +113,36 @@ def main():
     with open(os.path.join(prod_deployment_path, 'latestscore.txt'), 'r') as f:
         deployed_score = float(f.read().strip())
 
-    new_score = score_deployed_model_on_new_data()
-    print(f'Deployed model score: {deployed_score:.6f} | Score on new data: {new_score:.6f}')
+    drift_score = score_deployed_model_on_new_data()
+    print(f'Deployed model F1 on record: {deployed_score:.6f} | on new data: {drift_score:.6f}')
 
     ################## Deciding whether to proceed, part 2
-    if new_score >= deployed_score:
+    if drift_score >= deployed_score:
         print('No model drift detected. Ending process.')
         return
 
-    ################## Re-training
-    print('Model drift detected. Re-training.')
+    ################## Re-training a candidate model
+    print('Model drift detected. Training a candidate model on the new data.')
     subprocess.run([sys.executable, 'training.py'], check=True)
     subprocess.run([sys.executable, 'scoring.py'], check=True)
 
+    with open(os.path.join(output_model_path, 'latestscore.txt'), 'r') as f:
+        candidate_score = float(f.read().strip())
+
+    ################## Deciding whether to deploy: only if the candidate is better
+    print(f'Candidate model F1: {candidate_score:.6f} | Deployed model F1: {deployed_score:.6f}')
+    if candidate_score <= deployed_score:
+        print('Candidate model does not outperform the deployed model. '
+              'Deployment skipped; the current model remains in production.')
+        return
+
     ################## Re-deployment
     deployment.store_model_into_pickle()
-    print('New model re-deployed.')
+    print('Candidate model outperforms the deployed model. Re-deployed to production.')
 
     ################## Diagnostics and reporting
     run_reporting_and_api_calls()
-    archive_submission_outputs()
-    print('Reporting and diagnostics completed on the re-deployed model.')
+    print('Second-run reports generated: confusionmatrix2.png, apireturns2.txt.')
 
 
 if __name__ == '__main__':

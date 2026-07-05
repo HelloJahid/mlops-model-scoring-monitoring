@@ -65,33 +65,46 @@ def execution_time():
 
 ################## Function to check dependencies
 def outdated_packages_list():
-    # Get a list of current and latest package versions
-    requirements = {}
+    # Check every module listed in requirements.txt, reporting the version
+    # actually installed in the environment (via pip) and the latest
+    # version available on PyPI.
     with open('requirements.txt', 'r') as f:
-        for line in f:
-            line = line.strip()
-            if not line or '==' not in line:
-                continue
-            package, version = line.split('==', 1)
-            requirements[package] = version
+        required_packages = [
+            line.strip().split('==', 1)[0]
+            for line in f
+            if line.strip() and '==' in line
+        ]
 
-    result = subprocess.run(
+    installed_result = subprocess.run(
+        [sys.executable, '-m', 'pip', 'list', '--format=json'],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    installed_versions = {
+        item['name'].lower(): item['version']
+        for item in json.loads(installed_result.stdout or '[]')
+    }
+
+    outdated_result = subprocess.run(
         [sys.executable, '-m', 'pip', 'list', '--outdated', '--format=json'],
         check=True,
         capture_output=True,
         text=True,
     )
-    outdated_packages = {
-        item['name']: item['latest_version']
-        for item in json.loads(result.stdout or '[]')
+    latest_versions = {
+        item['name'].lower(): item['latest_version']
+        for item in json.loads(outdated_result.stdout or '[]')
     }
 
     rows = []
-    for package, current_version in requirements.items():
+    for package in required_packages:
+        key = package.lower()
+        installed = installed_versions.get(key, 'not installed')
         rows.append({
             'package': package,
-            'current_version': current_version,
-            'latest_version': outdated_packages.get(package, current_version),
+            'installed_version': installed,
+            'latest_version': latest_versions.get(key, installed),
         })
 
     return pd.DataFrame(rows)

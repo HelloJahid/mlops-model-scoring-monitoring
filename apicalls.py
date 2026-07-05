@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 import requests
 
@@ -27,6 +28,7 @@ responses = {
 }
 
 # Write the responses to your workspace
+output_name = sys.argv[1] if len(sys.argv) > 1 else 'apireturns.txt'
 os.makedirs(output_model_path, exist_ok=True)
-with open(os.path.join(output_model_path, 'apireturns.txt'), 'w') as f:
+with open(os.path.join(output_model_path, output_name), 'w') as f:
     f.write(json.dumps(responses, indent=2))

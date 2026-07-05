@@ -18,7 +18,7 @@ model_output_path = os.path.join(config['output_model_path'])
 
 
 ############## Function for reporting
-def score_model():
+def score_model(output_name='confusionmatrix.png'):
     # Calculate a confusion matrix using the test data and the deployed model
     # and write the confusion matrix to the workspace
     test_data = pd.read_csv(os.path.join(test_data_path, 'testdata.csv'))
@@ -28,7 +28,7 @@ def score_model():
     confusion_matrix = metrics.confusion_matrix(y_true, y_pred)
 
     os.makedirs(model_output_path, exist_ok=True)
-    output_path = os.path.join(model_output_path, 'confusionmatrix.png')
+    output_path = os.path.join(model_output_path, output_name)
 
     plt.figure(figsize=(6, 4))
     sns.heatmap(confusion_matrix, annot=True, fmt='d', cmap='Blues', cbar=False)
@@ -43,4 +43,5 @@ def score_model():
 
 
 if __name__ == '__main__':
-    score_model()
+    import sys
+    score_model(sys.argv[1] if len(sys.argv) > 1 else 'confusionmatrix.png')
